@@ -1,0 +1,31 @@
+Emacs Customization
+===================
+
+Benoit Leveau's emacs customization files.
+
+Interest
+--------
+
+I want to:
+- store the files centrally
+- having them on source control management so I don't end up with different versions at home or at work
+- easier to put them online than to carry the files in a USB key.
+
+Installing
+----------
+
+Steps:
+- clone the git repository into ~/emacs_includes
+- do a symlink from ~/.emacs to ~/emacs_includes/.emacs
+- restart emacs
+
+Current status
+--------------
+
+The current configuration is still very tied to my computer names, etc.
+I need to add a way to customize it by having an external configuration file containing:
+- user name
+- email address
+- for shortcut_folders, a list of (keyword, path) pairs
+I also need to add code that sources a user custom file if present, so that anyone can add his own
+customizations without interfering with the repository.
