@@ -1,2 +1,3 @@
 *.elc
 user_configuration.el
+user_setup_options.el

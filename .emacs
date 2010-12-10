@@ -90,7 +90,13 @@
 
 ;; load user setup file
 ;;
-(load-compile "user_setup.el")
+(setq user_setup_file "user_setup_options.el")
+(setq user_setup_file_full (concat custom-load-path (concat "/" user_setup_file)))
+(if (not (file-exists-p user_setup_file_full))
+	(load-compile "user_setup.el"))
+(if (not (file-exists-p user_setup_file_full))
+	(message "Error when reading user customization file!")
+  (load-compile user_setup_file))
 
 ;; load our default configuration file
 ;;

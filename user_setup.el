@@ -24,14 +24,18 @@
 
 ;;; Code:
 
-(setq user-setup
-	   '( 
-		 ("name" . "Benoit Leveau")
-		 ("email" . "benoit.leveau@gmail.com")
-		 ("location-name" . "London")
-		 ("location_based-mode" . t)
-		 ("company-name" . "The Moving Picture Company")
-		 ("default-frame-height" . 90)
-		 ))
+(setq user-setup-string
+	  (concat 
+	   "(setq user-setup "
+	   "'("
+	   "(\"name\" . \"" (read-from-minibuffer "Your name: ") "\")"
+	   "(\"email\" . \"" (read-from-minibuffer "Your email: ") "\")"
+	   "(\"location-name\" . \"" (read-from-minibuffer "Your location: ") "\")"
+	   "(\"location_based-mode\" . t )"
+	   "(\"company-name\" . \"" (read-from-minibuffer "Your company: ") "\")"
+	   "(\"default-frame-height\" . 90 )"
+	   "))"))
+
+(write-region user-setup-string nil user_setup_file_full)
 
 ;;; user_setup.el ends here
