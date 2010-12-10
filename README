@@ -4,13 +4,21 @@ Emacs Customization
 Benoit Leveau's emacs customization files.
 https://github.com/big--ben/emacs_config
 
-Interest
---------
+Motivation
+----------
 
 I want to:
-- store the files centrally
-- having them on source control management so I don't end up with different versions at home or at work
-- easier to put them online than to carry the files in a USB key.
+- store my emacs configuration files in one place (don't want to end up with different versions, don't want to carry them on usb, etc.)
+- have them on source control management so I can have branches, history, etc.
+- support linux and windows
+- be able to set different settings for each place I'm using the configuration (username, email, company name for copyright notices in files, etc.)
+- be able to add some custom files to define place-specific macros (MPC's oi, etc.)
+
+Result
+------
+
+I achieved pretty much everything I listed above.
+A better setup system is in progress. Right now, it prompts the user for all options and then write the corresponding setup to a file, for future sessions.
 
 Installing
 ----------
@@ -20,14 +28,18 @@ Steps:
 - do a symlink from ~/.emacs to ~/emacs_includes/.emacs
 - restart emacs
 
-Current status
---------------
+Customization
+-------------
 
-The current configuration is still very tied to my computer names, etc.
-I need to add a way to customize it by having an external configuration file containing:
-- user name
-- email address
-- for shortcut_folders, a list of (keyword, path) pairs
-I also need to add code that sources a user custom file if present, so that anyone can add his own
-customizations without interfering with the repository.
+The first time emacs launches, you'll be asked to enter some settings. These options are then
+written to emacs_include/user_setup_options.mel which will be loaded in the next sessions.
+You can reset the options by deleting this file. You can also edit it for quick changes.
 
+Also, after all the configuration is initialized, the emacs_include/user_configuration.el file
+is sourced if present. It's not part of git and is ignored by git, so users can put whatever they
+want inside.
+
+TODO
+----
+It would be good to be able to provide another file with the shortcut folders, as it won't be
+practical to have prompt for this kind of settings.
