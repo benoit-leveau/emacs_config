@@ -2,6 +2,7 @@ Emacs Customization
 ===================
 
 Benoit Leveau's emacs customization files.
+https://github.com/big--ben/emacs_config
 
 Interest
 --------
@@ -29,3 +30,4 @@ I need to add a way to customize it by having an external configuration file con
 - for shortcut_folders, a list of (keyword, path) pairs
 I also need to add code that sources a user custom file if present, so that anyone can add his own
 customizations without interfering with the repository.
+

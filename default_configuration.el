@@ -1,61 +1,51 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Emacs customizations
-;;
-;; To use this:
-;;	- byte compile this file into .emacs-source.elc
-;;	  i.e. go into the Emacs-Lisp menu and select "Byte Compile This File"
-;;	- in your .emacs file put the line
-;;		(load-file "~/.emacs-source.elc")
-;;	  to load the byte compiled version of this.  This reduces Emacs' start
-;;	  up time.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; default_configuration.el --- Emacs Default Configuration File
 
-;; A (sort-of) clean .emacs config file.
-;; Based on configuration file by:
-;; - Olivier Gutknecht
-;; - Gorge Siemens
-;; - Thomas Thiriez
-;; - Steve Dodd
-;; - Vivien Odou
+;; Copyright (C) 2010  Benoit Leveau
 
-;; This file is free software; you can redistribute it and/or modify
+;; Author: Benoit Leveau <benoit.leveau@gmail.com>
+;; Keywords: 
+
+;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
-;; the Free Software Foundation; either version 2, or (at your option)
-;; any later version.
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
 
-;; Copyright (C) 2010 by Benoit Leveau
-;; (just type M-x copyright ... Great fun)
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; 
+
+;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General Information
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; My info
-;;
-(setq user-full-name "Benoit Leveau")
-(if config-mpc
-	(progn
-	  (setq user-mail-address "benoit-l@moving-picture.com")
+(setq user-full-name (getUserInfo "name"))
 
-	  ;; Save every outgoing message to a file
-	  (setq mail-archive-file-name "~/mail/sent-items")
-
-	  ;; Home settings
-	  (setq smtpmail-default-smtp-server "mail")
-	  (setq mail-host-address "mail")
-	  (setq smtpmail-local-domain "mail"))
-  (setq user-mail-address "benoit.leveau@gmail.com"))
+;; Save every outgoing message to a file
+(setq mail-archive-file-name "~/mail/sent-items")
+  
+;; Home settings
+(setq smtpmail-default-smtp-server "mail")
+(setq mail-host-address "mail")
+(setq smtpmail-local-domain "mail")
+(setq user-mail-address (getUserInfo "email"))
 
 ;; My Address Book
 ;; You can put your addresses here. They will be expanded as you type in in
 ;; the mail mode
-; (define-mail-abbrev "damien" "foo[at]foo.com")
+; (define-mail-abbrev "foo" "foo[at]foo.com")
 
 ;; calendar
-(setq calendar-latitude 48.85)
-(setq calendar-longitude 2.34)
-(setq calendar-location-name "London")
+(setq calendar-location-name (getUserInfo "location-name"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use Dired-x
@@ -128,7 +118,7 @@
 ;; Python mode
 ;;
 (message "Loading Python mode...")
-(if (not config-pc)
+(if (not config-windows)
 	(setq load-path (cons "/sw/lib/python2.2/Misc/" load-path)))
 (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
 (setq interpreter-mode-alist (cons '("python" . python-mode)
@@ -158,7 +148,7 @@
 ;; to distinguish between centrally installed files and local files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(if config-mpc
+(if (getUserInfo "location_based-mode")
 	(progn
 	  (message "Loading location_based mode...")
 	  (load-compile "location_based-mode.el")))
@@ -169,7 +159,7 @@
 
 ;; CDB mode: debugging on Windows
 ;;
-(if config-pc
+(if config-windows
 	(progn
 	  (message "Loading CDB mode...")
 	  (load-compile "cdb-gud.el")))
@@ -225,26 +215,21 @@
 ;;
 (load-compile "shortcut-folders.el")
 
-(if config-mpc
-	(global-set-key (kbd "C-\\") 'buffer-swap)
-  (global-set-key (kbd "C-!") 'buffer-swap))
+(global-set-key (kbd "C-\\") 'buffer-swap)
+;; (global-set-key (kbd "C-!") 'buffer-swap))
 
 ;; BreadCrumb (global bookmarks)
 ;;
 (load-compile "breadcrumb.el")
 ;(require 'breadcrumb)
-;(if (not config-mpc)
-	(progn
-	  (global-set-key (kbd "C-x x s") 'bc-set)
-	  (global-set-key (kbd "C-x x p") 'bc-previous)
-	  (global-set-key (kbd "C-x x n") 'bc-next)
-	  ;(global-set-key (kbd "C-x x c") 'bc-local-previous)
-	  ;(global-set-key (kbd "C-x x c") 'bc-local-next)
-	  ;(global-set-key (kbd "C-x x c") 'bc-goto-current)
-	  (global-set-key (kbd "C-x x l") 'bc-list)
-	  ;(global-set-key (kbd "C-x x c") 'bc-clear)
-	  )
-;)
+(global-set-key (kbd "C-x x s") 'bc-set)
+(global-set-key (kbd "C-x x p") 'bc-previous)
+(global-set-key (kbd "C-x x n") 'bc-next)
+;(global-set-key (kbd "C-x x c") 'bc-local-previous)
+;(global-set-key (kbd "C-x x c") 'bc-local-next)
+;(global-set-key (kbd "C-x x c") 'bc-goto-current)
+(global-set-key (kbd "C-x x l") 'bc-list)
+;(global-set-key (kbd "C-x x c") 'bc-clear)
 
 (global-set-key (kbd "C-<f9>") 'bc-previous)
 (global-set-key (kbd "C-<f10>") 'bc-next)
@@ -270,8 +255,6 @@
 ;; abbreviation files
 (read-abbrev-file (concat custom-load-path "/.abbrev_defs") t)
 (setq save-abbrevs t)
-;(if config-mpc
-;	 (setq save-abbrevs (quote silently)))
 
 ;; Auto reload file
 ;;
@@ -331,7 +314,7 @@
 ;; Spell program
 ;;
 ; (setq ispell-program-name "/sw/bin/aspell")
-(if (not config-pc)
+(if (not config-windows)
 	(setq-default ispell-program-name "aspell"))
 
 ;; Display line/column number in status bar
@@ -450,34 +433,25 @@
 (global-set-key "\C-h" 'delete-backward-char)
 
 (global-set-key [f1] 'info)
-;;(global-set-key [f2] 'undo)
-(if (not config-eon)
-	(global-set-key [f2] 'save-and-recompile)
-  (global-set-key [f2] 'save-all-buffers))
+(global-set-key [f2] 'save-all-buffers)
 (global-set-key [f3] 'save-buffer)
-;;(global-set-key [f4] 'fill-paragraph)
 (global-set-key [f5] 'font-lock-mode)
-;;(global-set-key [f6] 'other-window)
 (global-set-key [f6] '1win)
 (global-set-key [f7] '2win)
 (global-set-key [f8] 'kill-this-buffer)
 (global-set-key [f9] 'font-lock-mode)
 (global-set-key [f10] 'add-change-log-entry)
-;;(global-set-key [f11] (quote ms:compile-icc))
-;;(global-set-key [f12] (quote kt:invoke-proto))
 
 (global-set-key [delete] 'delete-char)
 (global-set-key [C-delete] 'kill-word)
 (global-set-key [C-^] 'goto-line)
-;;(global-set-key "\C-x\C-g" 'goto-line)
-;;(global-set-key [kp-enter] 'newline-and-indent)
 
 (global-set-key [C-M-space] (quote just-one-space))
 (global-set-key [4194431]	(quote delete-horizontal-space)) ; C-DEL
-;;(global-set-key [S-backtab] (quote hippie-expand))
-(if config-mpc
-	(global-set-key (kbd "C-<tab>") 'hippie-expand)
-  (global-set-key (kbd "C-/") 'hippie-expand))
+
+(global-set-key (kbd "C-<tab>") 'hippie-expand)
+;; (global-set-key (kbd "C-/") 'hippie-expand))
+
 (global-set-key [C-end] (quote end-of-buffer))
 (global-set-key (quote [C-home]) (quote beginning-of-buffer))
 (global-set-key (kbd "C--") 'undo)
@@ -492,9 +466,8 @@
 
 ;; keyboard shortcut to access common projects
 ;;
-(if config-mpc
-	(global-set-key (kbd "C-/") 'shortcut-folders)
-  (global-set-key (kbd "C-$") 'shortcut-folders))
+(global-set-key (kbd "C-/") 'shortcut-folders)
+;; (global-set-key (kbd "C-$") 'shortcut-folders))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Grep Setup
@@ -508,7 +481,7 @@
 
 ;; Setting the grep command 
 ;;
-(if config-pc
+(if config-windows
 	(setq grep-find-command '("cygfind \"k:/Projects/\" ( -iname '*.cpp' -o -iname '*.h' -o -iname '*.inl' -o -iname '*.rh' ) -exec grep -Hn '' {} ;" . 122))
   (setq grep-find-command '("find ~/Projects/ \\( -iname '*.cpp' -o -iname '*.h' -o -iname '*.inl' -o -iname '*.rh' \\) -exec grep -Hn '' {} \\;" . 120)))
 
@@ -538,7 +511,7 @@
 (autoload 'thumbs-show-all-from-dir "thumbs" "Preview images in a directory." t)
 
 ;; Define the return key to avoid problems on MacOS X
-(if (not config-pc)
+(if (not config-windows)
 	(define-key function-key-map [return] [13]))
 
 ;; startup in full-screen on windows (doesn't work with 2win and 3win)
@@ -550,14 +523,11 @@
 ;; Frame Setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
 (setq default-frame-alist
 	  (append
 	   '((width . 120))
-	   (if config-pc
-		   '((height . 68))
-		 (if config-eon
-			 '((height . 48))
-		   '((height . 61))))
+	   '((height . 90)) ; ((getUserInfo "default-frame-height"))))
 	   '((cursor-blink . nil))
 	   default-frame-alist))
 
@@ -634,16 +604,14 @@
 	 ("Courier 18-b" "-adobe-courier-bold-r-normal--*-180-*-*-m-*-*-1")
 	 )))
 
-(if config-mpc
-	(set-face-attribute 'default nil :height 90)
-  (defun fontify-frame (frame)
-	(set-frame-parameter frame 'font "Monospace-9"))
+(set-face-attribute 'default nil :height 90)
+(defun fontify-frame (frame)
+  (set-frame-parameter frame 'font "Monospace-9"))
 
-  ;; Fontify current frame
-  (fontify-frame nil)
-  ;; Fontify any future frames
-  (push 'fontify-frame after-make-frame-functions)
-)
+;; Fontify current frame
+(fontify-frame nil)
+;; Fontify any future frames
+(push 'fontify-frame after-make-frame-functions)
 
 ;; TeX & LaTeX Stuff...
 (setq tex-dvi-view-command "xdvi")
@@ -703,37 +671,6 @@
 (setq sentence-end "[.?!][]\"')]*\\($\\|\t\\| \\)[ \t\n]*")
 (setq sentence-end-double-space nil)
 
-(global-set-key [f1] 'info)
-;;(global-set-key [f2] 'undo)
-(if (not config-eon)
-	(global-set-key [f2] 'save-and-recompile)
-  (global-set-key [f2] 'save-all-buffers))
-(global-set-key [f3] 'save-buffer)
-;;(global-set-key [f4] 'fill-paragraph)
-(global-set-key [f5] 'font-lock-mode)
-;;(global-set-key [f6] 'other-window)
-(global-set-key [f6] '1win)
-(global-set-key [f7] '2win)
-(global-set-key [f8] 'kill-this-buffer)
-(global-set-key [f9] 'font-lock-mode)
-(global-set-key [f10] 'add-change-log-entry)
-;;(global-set-key [f11] (quote ms:compile-icc))
-;;(global-set-key [f12] (quote kt:invoke-proto))
-
-(global-set-key [delete] 'delete-char)
-(global-set-key [C-delete] 'kill-word)
-(global-set-key [C-^] 'goto-line)
-;;(global-set-key "\C-x\C-g" 'goto-line)
-;;(global-set-key [kp-enter] 'newline-and-indent)
-
-(global-set-key [C-M-space] (quote just-one-space))
-(global-set-key [4194431]	(quote delete-horizontal-space)) ; C-DEL
-;;(global-set-key [backtab] (quote hippie-expand))
-;;(global-set-key (kbd "C-/") 'hippie-expand)
-(global-set-key [C-end] (quote end-of-buffer))
-(global-set-key (quote [C-home]) (quote beginning-of-buffer))
-(global-set-key (kbd "C--") 'undo)
-
 ;; Active the mouse wheel:
 ;; Add scrolling with mouse
 ;;
@@ -748,152 +685,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation Styles
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; (defconst eon-c-style
-;;   ;; Always indent c/c++ sources, never insert tabs
-;;   '((c-tab-always-indent		. t)
-;; 	;; Offset for line only comments
-;; 	(c-basic-offset . 4)
-;; 	(c-comment-only-line-offset . 0)
-;; 	;; Controls the insertion of newlines before and after braces.
-;; 	(c-hanging-braces-alist		. ((substatement-open after)
-;; 				   (brace-list-open)))
-;; 	;; Controls the insertion of newlines before and after certain colons.
-;; 	(c-hanging-colons-alist		. ((member-init-intro after)
-;; 				   (inher-intro)
-;; 								   (case-label after)
-;; 								   (label after)
-;; 								   (access-label after)))
-;; 	;; List of various C/C++/ObjC constructs to "clean up".
-;; 	(c-cleanup-list				. (scope-operator
-;; 								   defun-close-semi))
-;; 	;; Association list of syntactic element symbols and indentation offsets.
-;; 	(c-offsets-alist			. ((arglist-close . c-lineup-arglist)
-;; 								   (substatement-open . 0)
-;; 								   (case-label		  . +)
-;; 								   (block-open		  . 0)
-;; 								   (access-label	  . -)
-;; 								   (label			  . 0)
-;; 				   (inline-open		  . 0)
-;; 								   (knr-argdecl-intro . -)))
-;; 					; (c-echo-syntactic-information-p . t)
-;; 	)"E-ON Software C/C++ Programming Style" )
-
-;; (c-add-style "eon" eon-c-style)
-
-;; (defconst my-c-style
-;;   ;; Always indent c/c++ sources, never insert tabs
-;;   '((c-tab-always-indent		. t)
-;; 	;; Offset for line only comments
-;; 	(c-basic-offset . 3)
-;; 	(c-comment-only-line-offset . 0)
-;; 	;; Controls the insertion of newlines before and after braces.
-;;    (c-hanging-braces-alist	   . ((substatement-open before after)
-;; 				  (namespace-open before after)
-;; 				  (brace-list-open)))
-;; 	;; Controls the insertion of newlines before and after certain colons.
-;; 	(c-hanging-colons-alist		. ((member-init-intro after)
-;; 				   (inher-intro)
-;; 								   (case-label after)
-;; 								   (label after)
-;; 								   (access-label after)))
-;; 	;; List of various C/C++/ObjC constructs to "clean up".
-;; 	(c-cleanup-list				. (scope-operator
-;; ;;									 empty-defun-braces
-;; 								   defun-close-semi))
-;; 	;; Association list of syntactic element symbols and indentation offsets.
-;; 	(c-offsets-alist			. ((arglist-close . c-lineup-arglist)
-;; 								   (substatement-open . 0)
-;; 								   (case-label		  . +)
-;; 								   (block-open		  . 0)
-;; 								   (access-label	  . -)
-;; 				   (inclass			  . ++)
-;; 								   (label			  . 0)
-;; 				   (innamespace		  . 0)
-;; 				   (inline-open		  . 0)
-;; 								   (knr-argdecl-intro . -)))
-;; 					; (c-echo-syntactic-information-p . t)
-;; 	)"Titoz' C/C++ Programming Style" )
-
-;; (c-add-style "mon style" my-c-style)
-
-;; (defun my-c-mode-common-hook ()
-;;   (c-set-style "ellemtel")
-
-;;   (define-key c-mode-base-map "\C-m" 'c-context-line-break)
-;;   (auto-fill-mode)
-
-;;   (if (and (not config-pc) config-eon)
-;; 	  (set (make-local-variable 'compile-command)
-;; 	   "cd ~/Vue/debug; /Users/jvalgent/preMake && make -j 6"))
-
-;;   (setq compilation-scroll-output t)
-
-;;   (if (not config-eon)
-;; 	  (progn
-;; 	;; pour chez moi
-;; 	(define-skeleton my-skeleton-c-if-block
-;; 	  "Insert a c if statement" nil
-;; 	  > "if ()" \n
-;; 	  "{" > \n
-;; 	  > _ \n
-;; 	  > "}" >)
-;; 	(local-set-key "\C-c\C-i" 'my-skeleton-c-if-block)
-;; 	(c-set-style "mon style")
-;; 	)
-;; 	;; pour e-on
-;; 	(define-skeleton my-skeleton-c-if-block
-;; 	  "Insert a c if statement" nil
-;; 	  > "if () {" \n
-;; 	  > _ \n
-;; 	  > "}" '(indent-for-tab-command))
-;; 	(local-set-key "\C-c\C-i" 'my-skeleton-c-if-block)
-
-;; 	(c-set-style "eon")
-;; 	(setq tab-width 4)
-;; 	; (read-abbrev-file "/_abbrev_defs" t)
-;; 	)
-;;   )
-
-;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
-
-;; (defconst mpc-c-style
-;;    ;; Always indent c/c++ sources, never insert tabs
-;;    '((c-tab-always-indent		. t)
-;;  	;; Offset for line only comments
-;;  	(c-basic-offset . 4)
-;;  	(c-comment-only-line-offset . 0)
-;;  	;; Controls the insertion of newlines before and after braces.
-;;  	(c-hanging-braces-alist		. ((substatement-open after)
-;;  				   (brace-list-open)))
-;;  	;; Controls the insertion of newlines before and after certain colons.
-;;  	(c-hanging-colons-alist		. ((member-init-intro after)
-;;  				   (inher-intro)
-;;  								   (case-label after)
-;;  								   (label after)
-;;  								   (access-label after)))
-;;  	;; List of various C/C++/ObjC constructs to "clean up".
-;;  	(c-cleanup-list				. (scope-operator
-;;  								   defun-close-semi))
-;;  	;; Association list of syntactic element symbols and indentation offsets.
-;;  	(c-offsets-alist			. ((arglist-close . c-lineup-arglist)
-;;  								   (substatement-open . 0)
-;;  								   (case-label		  . +)
-;;  								   (block-open		  . 0)
-;;  								   (access-label	  . -)
-;;  								   (label			  . 0)
-;;  				   (inline-open		  . 0)
-;;  								   (knr-argdecl-intro . -)))
-;;  					; (c-echo-syntactic-information-p . t)
-;;  	)"MPC C/C++ Programming Style" )
-
-;; (c-add-style "mpc" mpc-c-style)
-;; (defun my-c-mode-common-hook ()
-;;   (c-set-style "eon")
-;;   (setq tab-width 4)
-;;   ;; (read-abbrev-file "/_abbrev_defs" t)
-;;   )
-;; (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
 
 (defun my-c-mode-common-hook ()
  ;; my customizations for all of c-mode, c++-mode, objc-mode, java-mode
@@ -983,7 +774,7 @@
 				  'scroll-other-window-down))
 ;;(setq scroll-step 0)
 ;;(setq scroll-margin 2)
-;;(if (not config-pc)
+;;(if (not config-windows)
 ;;	  (progn
 ;;		(setq explicit-shell-file-name "/bin/zsh")
 ;;		(setq calc-gnuplot-name "/sw/bin/gnuplot")))
@@ -1006,7 +797,7 @@
   (save-some-buffers t)
   (recompile))
 
-(if (not config-pc)
+(if (not config-windows)
 	(defun save-and-compile-this-file ()
 	  "Save all buffers, and compile this file"
 	  (interactive)
@@ -1023,7 +814,7 @@
 	  ""
 	(concat "\"" (car strlist) "\" " (make-arg-list (cdr strlist)))))
 
-(if (not config-pc)
+(if (not config-windows)
 	(defun save-and-compile-modified ()
 	  "Save all buffers, and compile modified file"
 	  (interactive)
@@ -1106,19 +897,13 @@
 (defun 1win ()
   "1 window"
   (interactive)
-  ;(if config-mpc
-   ;   (set-frame-width (selected-frame) 220)
-	(set-frame-width (selected-frame) 120)
-  ;)
+  (set-frame-width (selected-frame) 120)
   (delete-other-windows))
 
 (defun 2win ()
   "2 windows"
   (interactive)
-  ;(if config-mpc
-;	   (set-frame-width (selected-frame) 226)
-	(set-frame-width (selected-frame) 244)
-  ;)
+  (set-frame-width (selected-frame) 244)
   (delete-other-windows)
   (split-window-horizontally))
 
@@ -1132,13 +917,13 @@
   (balance-windows))
 
 (setq cc-other-file-alist
-'(("\\.cpp$" (".h" ".hpp" ".inl"))
-("\\.h$" (".inl" ".cpp" ".c"))
-("\\.hpp$" (".inl" ".cpp" ".c"))
-("\\.inl$" (".cpp" ".c" ".h" ".hpp"))
-("\\.rh$" (".erc"))
-("\\.erc$" (".rh"))
-))
+	  '(("\\.cpp$" (".h" ".hpp" ".inl"))
+		("\\.h$" (".inl" ".cpp" ".c"))
+		("\\.hpp$" (".inl" ".cpp" ".c"))
+		("\\.inl$" (".cpp" ".c" ".h" ".hpp"))
+		("\\.rh$" (".erc"))
+		("\\.erc$" (".rh"))
+		))
 
 (global-set-key (kbd "C-=") 'ff-find-other-file)
 
@@ -1150,95 +935,50 @@
 (define-abbrev c++-mode-abbrev-table "$cout" "" 'my-skeleton-c-cout)
 
 (load-library "autoinsert")
-(if config-mpc
-	(progn
-	  (setq auto-insert-alist
-		(append
-		 '((("\\.\\([Cc]\\|cc\\|cpp\\)\\'" . "C / C++ program")
-		nil "/*\n\n***********************************************************\n* © The Moving Picture Company, inc. All rights reserved. *\n***********************************************************\n\n*/\n\n\n"
-		"#include \""
 
-		;; without checking for the file existence
-		(file-name-nondirectory
-		 (file-name-sans-extension buffer-file-name))
-		".h\"\n\n"))
-
-		 ;; with checking for the file existence
-		 ;;		  (let
-		 ;;			  ((stem
-		 ;;			(file-name-sans-extension buffer-file-name)))
-		 ;;			(cond
-		 ;;			 ((file-exists-p
-		 ;;			   (concat stem ".h"))
-		 ;;			  (file-name-nondirectory
-		 ;;			  (concat stem ".h")))
-		 ;;			 ((file-exists-p
-		 ;;			 (concat stem ".hh"))
-		 ;;			  (file-name-nondirectory
-		 ;;			  (concat stem ".hh")))))
-		 ;;		  & "\"\n\n" | -10))
-		 auto-insert-alist))
-
-	  (setq auto-insert-alist
-		(append
-		 '((("\\.\\([Hh]\\|hh\\|hpp\\)\\'" . "C / C++ header")
-		(upcase
-		 (concat
-		  (file-name-nondirectory
-		   (substring buffer-file-name 0
-				  (match-beginning 0)))
-		  "_"
-		  (substring buffer-file-name
-				 (1+
-				  (match-beginning 0)))))
-		"/*\n\n***********************************************************\n* © The Moving Picture Company, inc. All rights reserved. *\n***********************************************************\n\n*/\n\n"
-		"#ifndef " str n "#define " str
-		"\n\n" _ "\n\n#endif // !" str "\n"))
-		 auto-insert-alist)))
-  (progn
-	(setq auto-insert-alist
+(setq auto-insert-alist
 	  (append
 	   '((("\\.\\([Cc]\\|cc\\|cpp\\)\\'" . "C / C++ program")
-		  nil "/*\n\n**********************************************\n* © e-on software, inc. All rights reserved. *\n**********************************************\n\n*/\n\n#include \"stdafx.h\"\n\n"
+		  nil (concat "/*\n\n***********************************************************\n* © " (getUserInfo "company-name") ", inc. All rights reserved. *\n***********************************************************\n\n*/\n\n\n")
 		  "#include \""
-
+		  
 		  ;; without checking for the file existence
 		  (file-name-nondirectory
 		   (file-name-sans-extension buffer-file-name))
 		  ".h\"\n\n"))
-
+	   
 	   ;; with checking for the file existence
-	   ;;	  (let
-	   ;;		  ((stem
-	   ;;		(file-name-sans-extension buffer-file-name)))
-	   ;;		(cond
-	   ;;		 ((file-exists-p
-	   ;;		   (concat stem ".h"))
-	   ;;		  (file-name-nondirectory
-	   ;;		  (concat stem ".h")))
-	   ;;		 ((file-exists-p
-	   ;;		 (concat stem ".hh"))
-	   ;;		  (file-name-nondirectory
-	   ;;		  (concat stem ".hh")))))
-	   ;;	  & "\"\n\n" | -10))
+	   ;;		  (let
+	   ;;			  ((stem
+	   ;;			(file-name-sans-extension buffer-file-name)))
+	   ;;			(cond
+	   ;;			 ((file-exists-p
+	   ;;			   (concat stem ".h"))
+	   ;;			  (file-name-nondirectory
+	   ;;			  (concat stem ".h")))
+	   ;;			 ((file-exists-p
+	   ;;			 (concat stem ".hh"))
+	   ;;			  (file-name-nondirectory
+	   ;;			  (concat stem ".hh")))))
+	   ;;		  & "\"\n\n" | -10))
 	   auto-insert-alist))
 
-	(setq auto-insert-alist
+(setq auto-insert-alist
 	  (append
 	   '((("\\.\\([Hh]\\|hh\\|hpp\\)\\'" . "C / C++ header")
 		  (upcase
 		   (concat
-		(file-name-nondirectory
-		 (substring buffer-file-name 0
-				(match-beginning 0)))
-		"_"
-		(substring buffer-file-name
-			   (1+
-				(match-beginning 0)))))
-		  "/*\n\n**********************************************\n* © e-on software, inc. All rights reserved. *\n**********************************************\n\n*/\n\n"
+			(file-name-nondirectory
+			 (substring buffer-file-name 0
+						(match-beginning 0)))
+			"_"
+			(substring buffer-file-name
+					   (1+
+						(match-beginning 0)))))
+		  (concat "/*\n\n***********************************************************\n* © " (getUserInfo "company-name") ", inc. All rights reserved. *\n***********************************************************\n\n*/\n\n")
 		  "#ifndef " str n "#define " str
 		  "\n\n" _ "\n\n#endif // !" str "\n"))
-	   auto-insert-alist))))
+	   auto-insert-alist))
 
 (require 'edmacro)
 (setq last-kbd-macro (edmacro-parse-keys "C-a TAB C-SPC C-e M-w M-m std 2*: cout C-q SPC 2*< SPC \" C-e : SPC \" SPC 2*< C-y SPC 2*< SPC std 2*: endl ;"))
@@ -1347,43 +1087,28 @@
 ;; END OF BUFFER SWITCHING FIX
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- '(dired-recursive-deletes (quote top))
- '(muse-project-alist (quote (("BenPlanner" ("~/plans" "index")))))
- '(planner-carry-tasks-forward 0))
-(custom-set-faces
-  ;; custom-set-faces was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
- )
-
-;(if config-mpc
-;	 (load-compile "prev-next-buffer.el"))
+;; (custom-set-variables
+;;   ;; custom-set-variables was added by Custom.
+;;   ;; If you edit it by hand, you could mess it up, so be careful.
+;;   ;; Your init file should contain only one such instance.
+;;   ;; If there is more than one, they won't work right.
+;;  '(dired-recursive-deletes (quote top))
+;;  '(muse-project-alist (quote (("BenPlanner" ("~/plans" "index")))))
+;;  '(planner-carry-tasks-forward 0))
+;; (custom-set-faces
+;;   ;; custom-set-faces was added by Custom.
+;;   ;; If you edit it by hand, you could mess it up, so be careful.
+;;   ;; Your init file should contain only one such instance.
+;;   ;; If there is more than one, they won't work right.
+;;  )
 
 (defun my_init ()
   "Init"
   (interactive)
   (2win)
-   ;(if config-mpc
-	; (progn
-	 ;	(kill-buffer "*Compile-Log*")
-	  ; (switch-to-other-buffer 0)
-	  ; (switch-to-other-buffer 0)
-	  ;)
-	 ;(progn
-	   (next-buffer)
-	   (next-buffer)
-	  ;)
-   (wcy-desktop-load-file)
-  ;;(other-window)
-  ;;(next-buffer)
-  ;;(wcy-desktop-load-file)
-  ;;(other-window)
+  (next-buffer)
+  (next-buffer)
+  (wcy-desktop-load-file)
 )
 
 (defun open-same-buffer-other-window ()
@@ -1527,33 +1252,6 @@ FORCE-OTHER-WINDOW is ignored."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; MPC Commands
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if config-mpc
-	(progn
-	  (defun oi-quick ( user choice )
-		"Sends an oi automatic message"
-		(interactive "sUser: \ncMessage (F) Filename, (R) Region'): ")
-		(cond ((eq choice ?F)
-			   (progn
-				 (setq oi-message (if (eq major-mode 'dired-mode)
-									  (dired-get-filename)
-									(or (buffer-file-name) "")))
-				 (setq command (concat "echo " (shell-quote-argument oi-message) " | oi " user " --i"))
-				 (shell-command command)))
-			  ((eq choice ?R)
-			   (progn
-			   (setq command (concat "oi " user " --i"))
-			   (shell-command-on-region (mark) (point) command)))
-			  (t (message "Unrecognized command"))))
-	  (defun oi-message ( user message )
-		"Sends an oi message"
-		(interactive "sUser: \nsMessage: ")
-		(setq command (concat "echo " (shell-quote-argument message) " | oi " user " --i"))
-		(shell-command command))))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Useful functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -1587,3 +1285,5 @@ FORCE-OTHER-WINDOW is ignored."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (run-at-time "1 sec" nil (lambda () (my_init)))
+
+;;; default_configuration.el ends here

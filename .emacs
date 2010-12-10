@@ -1,66 +1,56 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Computer-specific switches
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; .emacs.el --- Emacs Configuration File
+
+;; Copyright (C) 2010  Benoit Leveau
+
+;; Author: Benoit Leveau <benoit.leveau@gmail.com>
+;; Keywords: 
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; 
+
+;;; Code:
 
 (message "Detecting computer configuration...")
 
 ;; Global switches
 ;;
-(setq config-pc t)
-(setq config-mac nil)
+(setq config-windows nil)
 (setq config-linux nil)
 
-(setq config-eon nil)
-(setq config-mpc nil)
+(if (string-match "linux" system-configuration)
+	(setq config-linux t)
+  (if (string-match "windows" system-configuration)
+	  (setq config-windows t)))
 
-(if (or (equal system-name "prudish.mpc.local")
-	(equal system-name "capri.mpc.local"))
-    ;; Shide Computer at MPC
-    (progn
-      (message "Computer 'Shide': LINUX-MPC")
-      (setq config-pc nil)
-      (setq config-linux t)
-      (setq config-mpc t))
-  (if (equal system-name "TOTORO")
-      ;; Vista64 at e-on
-      (progn
-	(message "Computer 'Totoro': PC-EON")
-	(setq config-eon t))
-    (if (equal system-name "QUAD")
-	;; Shared MacOS at e-on
-	(progn
-	  (message "Computer 'Quad': MAC-EON")
-	  (setq config-pc nil)
-	  (setq config-mac nil)
-	  (setq config-eon t))
-      ;; home computer
-      (progn
-	(message "Computer 'Unknown': PC-NOT_EON")))))
-
-;; Main Drive Letter is E at home...
-(if config-eon
-    (setq main_drive_E nil)
-  (setq main_drive_E t))
+(message (concat "Computer '" system-name "' | " system-configuration))
 
 ;; directory to put various .el files into
 ;;
-(if config-pc
-    (if main_drive_E
-	(setq custom-load-path "E:/emacs_includes")
-      (setq custom-load-path "C:/emacs_includes"))
-  (if config-linux
-      (if config-mpc
-	  (setq custom-load-path "~/emacs_includes")
-	(setq custom-load-path "~/lib/emacs/emacs_includes"))
-    (setq custom-load-path "~/lib/emacs/emacs_includes")))
+(if config-windows
+	(setq custom-load-path "C:/emacs_includes")
+  (setq custom-load-path "~/emacs_includes"))
 
 (setq load-path (cons custom-load-path load-path))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Loading (and compiling if necessary) custom .emacs file
+;; Loading (and compiling if necessary) any .el file
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun load-compile (file_to_load)
+(defun load-compile (file_to_load &optional ignore_non_existing)
   "Load a compile version of the file (or compile it if necessary)"
   (interactive "sFile to load: ")
   (setq file (concat custom-load-path (concat "/" file_to_load)))
@@ -68,17 +58,46 @@
   
   ;; Make sure source file exists
   (if (not (file-exists-p file))
-    (message (concat "Can't load " (concat file_to_load ". Make sure path is correct!"))))
-
-  ;; Load compiled version of file (compile the .el file if necessary)
-  (if (or (not (file-exists-p file-compiled)) (file-newer-than-file-p file file-compiled))
-      (progn
-	(load file)
-	(byte-compile-file file)
-	(kill-buffer "*Compile-Log*"))
-    (load file-compiled))
+	  (if (not ignore_non_existing)
+		  (message (concat "Can't load " (concat file_to_load ". Make sure path is correct!"))))
+	;; Load compiled version of file (compile the .el file if necessary)
+	(if (or (not (file-exists-p file-compiled)) (file-newer-than-file-p file file-compiled))
+		(progn
+		  (load file)
+		  (byte-compile-file file)
+		  (kill-buffer "*Compile-Log*"))
+	  (load file-compiled)))
 )
 
-;; load or custom .emacs file
-(message "Loading custom .emacs file...")
-(load-compile "custom_emacs.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Getting the user configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun getFromList(list index)
+  (if (not (equal nil list))
+	  (if (equal index (car (car list)))
+		  (cdr (car list))
+		(getFromList (cdr list) index))))
+
+(defun getUserInfo(index)
+  (getFromList user-setup index))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Loading the configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; load user setup file
+;;
+(load-compile "user_setup.el")
+
+;; load our default configuration file
+;;
+(load-compile "default_configuration.el")
+
+;; load optional user configuration
+;;
+(load-compile "user_configuration.el" t)
+
+;;; .emacs.el ends here
