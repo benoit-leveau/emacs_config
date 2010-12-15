@@ -28,6 +28,14 @@ Steps:
 - do a symlink from ~/.emacs to ~/emacs_includes/.emacs
 - restart emacs
 
+Internals
+---------
+
+The .emacs file registers some compiling functions, sets the path according to the OS
+and then loads the default_configuration.el file, which is the main file containing
+the usual emacs customization functions (loading the modes, setting the shortcuts, the
+foncts, etc.).
+
 Customization
 -------------
 
