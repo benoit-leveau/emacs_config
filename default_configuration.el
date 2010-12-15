@@ -142,7 +142,7 @@
 
 ;; loads ruby mode when a .rb file is opened.
 ;;
-(setq load-path (cons "haskell-mode-2.1" load-path))
+(setq load-path (cons (concat custom-load-path "/haskell-mode-2.1") load-path))
 (load "haskell-mode.el")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
