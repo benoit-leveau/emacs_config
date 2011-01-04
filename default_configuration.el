@@ -302,6 +302,7 @@
 (global-font-lock-mode t)
 
 ;; Deleted text won't go to kill-ring
+;; also: Replace selection by what you type!
 ;;
 (delete-selection-mode t)
 
