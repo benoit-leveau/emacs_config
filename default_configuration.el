@@ -71,12 +71,26 @@
 (wcy-desktop-init)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; JS2
+;; http://code.google.com/p/js2-mode/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load-compile "js2.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UndoTree mode
 ;; http://www.emacswiki.org/emacs/UndoTree
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load-compile "undo-tree.el")
 (global-undo-tree-mode)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Column Marker Mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(load-compile "column-marker.el")
+(column-marker-1 (getUserInfo "max-column-width"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Loading edition modes
@@ -395,7 +409,7 @@
 ;; Tabs & Indentation
 ;;
 (setq-default tab-width 4)
-(setq-default indent-tabs-mode t)
+(setq-default indent-tabs-mode (getUserInfo "use-tabs"))
 
 ;; yes -> y, no -> n
 ;;
@@ -463,13 +477,13 @@
  (c-set-offset 'substatement-open 0)
  ;; other customizations can go here
 
- (setq c++-tab-always-indent t)
+ (setq c++-tab-always-indent (getUserInfo "use-tabs"))
  (setq c-basic-offset 4)                  ;; Default is 2
  (setq c-indent-level 4)                  ;; Default is 2
 
  (setq tab-stop-list '(4 8 12 16 20 24 28 32 36 40 44 48 52 56 60))
  (setq tab-width 4)
- (setq indent-tabs-mode t)  ; use spaces only if nil
+ (setq indent-tabs-mode (getUserInfo "use-tabs"))  ; use spaces only if nil
  )
 
 (add-hook 'c-mode-common-hook 'my-c-mode-common-hook)
@@ -778,7 +792,9 @@ FORCE-OTHER-WINDOW is ignored."
 (defun prepare-file ()
   (interactive)
   (delete-trailing-whitespace)
-  (tabify (point-min) (point-max))
+  (if (getUserInfo "use-tabs")
+	  (tabify (point-min) (point-max))
+	(untabify (point-min) (point-max)))
   (save-buffer))
 
 (defun uniquify-all-lines-region (start end)
