@@ -27,13 +27,13 @@
 ;; location_based mode startup function.
 ;;
 (defun change-buffer-color ()
-  (if (string-match "^\/software\/" (file-name-directory buffer-file-name))
+  (if (string-match "^\/jobs\/" (file-name-directory buffer-file-name))
 	  (progn
 		(buffer-bg-set-color "#683d8b" buffer-file-name)
 		(if (not buffer-read-only)
 			(toggle-read-only)))
-	(if (or (string-match "^\/usr\/people\/[a-z]+\-[a-z]+\/tools" (file-name-directory buffer-file-name))
-			(string-match "^~\/tools" (file-name-directory buffer-file-name)))
+	(if (or (string-match "^\/code/python2.6" (file-name-directory buffer-file-name))
+			(string-match "^~\/code/addons" (file-name-directory buffer-file-name)))
 		(buffer-bg-set-color "#485d8b" buffer-file-name)
 	  (buffer-bg-set-color nil buffer-file-name))))
 
