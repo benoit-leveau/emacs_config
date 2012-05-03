@@ -1031,6 +1031,8 @@ FORCE-OTHER-WINDOW is ignored."
 
 (global-set-key (kbd "C-:") 'help)
 
+(global-set-key (kbd "C-t") 'yank)
+
 ;; alt-g-g for goto-line (already working)
 ;;
 ; (global-set-key "\347\347" (quote goto-line))
