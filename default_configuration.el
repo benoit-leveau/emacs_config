@@ -129,6 +129,11 @@
 (setq auto-mode-alist (cons '("\\.mel$" . php-mode) auto-mode-alist))
 (load-compile "mel-mode.el")
 
+;; StumpWM mode
+;;
+(message "Loading StumpWM mode...")
+(load-compile "stumpwm-mode.el")
+
 ;; Python mode
 ;;
 (message "Loading Python mode...")
