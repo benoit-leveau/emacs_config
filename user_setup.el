@@ -33,7 +33,7 @@
 	   "(\"location-name\" . \"" (read-from-minibuffer "Your location: ") "\")"
 	   "(\"location_based-mode\" . t )"
 	   "(\"company-name\" . \"" (read-from-minibuffer "Your company: ") "\")"
-	   "(\"default-frame-height\" . 90 )"
+	   "(\"default-font-height\" . 90 )"
 	   "(\"use-tabs\" . \\" (read-from-minibuffer "Use tabs (t/nil): ") "\")"
 	   "(\"max-column-width\" . \\" (read-from-minibuffer "Max column width: ") "\")"
 	   "))"))
