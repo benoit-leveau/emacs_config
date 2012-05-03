@@ -728,6 +728,11 @@
   (wcy-desktop-load-file)
 )
 
+(defun fullscreen ()
+  (interactive)
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                         '(2 "_NET_WM_STATE_FULLSCREEN" 0)))
+
 (defun open-same-buffer-other-window ()
   "Open in other window"
   (interactive)
@@ -1054,6 +1059,7 @@ FORCE-OTHER-WINDOW is ignored."
 (global-set-key [f8] 'kill-this-buffer)
 (global-set-key [f9] 'font-lock-mode)
 (global-set-key [f10] 'add-change-log-entry)
+(global-set-key [f11] 'fullscreen)
 
 (global-set-key [delete] 'delete-char)
 (global-set-key [C-delete] 'kill-word)
