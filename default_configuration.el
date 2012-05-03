@@ -705,7 +705,7 @@
 (require 'mm-url)
 (defun google-define-word-or-phrase (query)
   (interactive "sInsert word or phrase to search: ")
-  (let* ((url (concat "http://www.google.com/search?hl=en&q=define%3A"
+  (let* ((url (concat "http://www.google.com/webhp?hl=en&q=define%3A"
 			  (replace-regexp-in-string " " "+" query)))
 	 (definition
 	   (save-excursion
