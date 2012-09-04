@@ -106,4 +106,10 @@
 ;;
 (load-compile "user_configuration.el" t)
 
+;; load our default configuration file
+;;
+(setq custom_setup_file "custom_options.el")
+(if (file-exists-p custom_setup_file)
+    (load-compile custom_setup_file))
+
 ;;; .emacs.el ends here

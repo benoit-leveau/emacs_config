@@ -1,3 +1,4 @@
+
 ;;; default_configuration.el --- Emacs Default Configuration File
 
 ;; Copyright (C) 2010  Benoit Leveau
@@ -153,11 +154,45 @@
 								("\\.src\\'" . c++-mode))
 							  auto-mode-alist))
 
-
 ;; loads ruby mode when a .rb file is opened.
 ;;
 (setq load-path (cons (concat custom-load-path "/haskell-mode-2.1") load-path))
 (load "haskell-mode.el")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; ORG mode
+;; for todo lists, etc.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; org-mode
+(require 'org-install)
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(setq org-log-done t)
+
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(org-auto-align-tags t)
+ '(org-support-shift-select t)
+ '(spice-output-local "Gnucap")
+ '(spice-simulator "Gnucap")
+ '(spice-waveform-viewer "Gwave"))
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+
+;; Add WIP Status
+(setq org-todo-keyword-faces
+      '(
+        ("WIP" . (:foreground "orange" :weight bold))
+        ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; LocationBased mode
@@ -438,7 +473,7 @@
 ;; Aliases
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defalias 'create-directory make-directory)
+(defalias 'create-directory 'make-directory)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Grep Setup
@@ -473,6 +508,10 @@
 
 (message "Setup fonts...")
 (load-compile "custom_fonts.el")
+
+;; (setq load-path (cons (concat custom-load-path "/emacs-color-theme-solarized") load-path))
+;; (enable-theme 'solarized-light)
+;; (enable-theme 'solarized-dark)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation Styles
@@ -682,6 +721,11 @@
   (wcy-desktop-load-file)
 )
 
+(defun fullscreen ()
+  (interactive)
+  (x-send-client-message nil 0 nil "_NET_WM_STATE" 32
+                         '(2 "_NET_WM_STATE_FULLSCREEN" 0)))
+
 (defun open-same-buffer-other-window ()
   "Open in other window"
   (interactive)
@@ -694,7 +738,7 @@
 (require 'mm-url)
 (defun google-define-word-or-phrase (query)
   (interactive "sInsert word or phrase to search: ")
-  (let* ((url (concat "http://www.google.com/search?hl=en&q=define%3A"
+  (let* ((url (concat "http://www.google.com/webhp?hl=en&q=define%3A"
 			  (replace-regexp-in-string " " "+" query)))
 	 (definition
 	   (save-excursion
@@ -980,6 +1024,8 @@ FORCE-OTHER-WINDOW is ignored."
 
 (global-set-key (kbd "C-:") 'help)
 
+(global-set-key (kbd "C-t") 'yank)
+
 ;; alt-g-g for goto-line (already working)
 ;;
 ; (global-set-key "\347\347" (quote goto-line))
@@ -1008,6 +1054,7 @@ FORCE-OTHER-WINDOW is ignored."
 (global-set-key [f8] 'kill-this-buffer)
 (global-set-key [f9] 'font-lock-mode)
 (global-set-key [f10] 'add-change-log-entry)
+(global-set-key [f11] 'fullscreen)
 
 (global-set-key [delete] 'delete-char)
 (global-set-key [C-delete] 'kill-word)
