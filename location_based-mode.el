@@ -33,8 +33,11 @@
 		(if (not buffer-read-only)
 			(toggle-read-only)))
 	(if (or (string-match "^\/code/python2.6" (file-name-directory buffer-file-name))
-			(string-match "^~\/code/addons" (file-name-directory buffer-file-name)))
-		(buffer-bg-set-color "#485d8b" buffer-file-name)
+			(string-match "^\/code/addons" (file-name-directory buffer-file-name)))
+        (progn
+          (buffer-bg-set-color "#485d8b" buffer-file-name)
+          (if (not buffer-read-only)
+              (toggle-read-only)))
 	  (buffer-bg-set-color nil buffer-file-name))))
 
 (add-hook 'find-file-hook 'change-buffer-color)

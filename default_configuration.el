@@ -130,6 +130,11 @@
 (setq auto-mode-alist (cons '("\\.mel$" . php-mode) auto-mode-alist))
 (load-compile "mel-mode.el")
 
+;; StumpWM mode
+;;
+(message "Loading StumpWM mode...")
+(load-compile "stumpwm-mode.el")
+
 ;; Python mode
 ;;
 (message "Loading Python mode...")
@@ -512,6 +517,8 @@
 ;; (setq load-path (cons (concat custom-load-path "/emacs-color-theme-solarized") load-path))
 ;; (enable-theme 'solarized-light)
 ;; (enable-theme 'solarized-dark)
+
+(set-face-attribute 'default nil :height (getUserInfo "default-font-height"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Indentation Styles
