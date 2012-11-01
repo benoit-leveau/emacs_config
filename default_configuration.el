@@ -84,7 +84,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load-compile "undo-tree.el")
-(global-undo-tree-mode)
+;; (global-undo-tree-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Column Marker Mode
@@ -422,7 +422,7 @@
 (define-global-minor-mode global-highlight-parentheses-mode
   highlight-parentheses-mode
   turn-on-highlight-parentheses-mode)
-(global-highlight-parentheses-mode)
+;; (global-highlight-parentheses-mode)
 (setq hl-paren-background-colors '("DarkSlateBlue"))
 
 ;; Turn off backup files.
