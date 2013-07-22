@@ -1,0 +1,5 @@
+#!/code/bin/sl6/pyfon
+import os
+os.environ["PYTHONPATH"]="/code/python2.6/el6:/code/addons/el6/maya2012sp1/python/"
+from pylint import epylint
+epylint.Run()
