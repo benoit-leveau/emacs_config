@@ -303,6 +303,11 @@
    (t (error "%s does not appear to be under version control" default-directory))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Customize rgrep template by adding '-L' option
+
+(setq grep-find-template "find -L . <X> -type f <F> -print0 | xargs -0 -e grep <C> -nH -e <R>")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; BreadCrumb (global bookmarks)
 ;; http://breadcrumbemacs.sourceforge.net
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
