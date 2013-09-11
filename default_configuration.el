@@ -135,6 +135,11 @@
 (message "Loading StumpWM mode...")
 (load-compile "stumpwm-mode.el")
 
+;; YAML mode
+;;
+(message "Loading YAML mode...")
+(load-compile "yaml-mode.el")
+
 ;; Python mode
 ;;
 (message "Loading Python mode...")
