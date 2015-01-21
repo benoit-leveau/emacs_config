@@ -1183,6 +1183,8 @@ FORCE-OTHER-WINDOW is ignored."
 
 (global-set-key "\C-x\C-b" 'bs-show)
 
+(global-set-key (kbd "C-<Scroll_Lock>") 'compare-windows)
+
 ;; Breadcrumb shortcuts
 ;;
 (global-set-key (kbd "C-x x s") 'bc-set)
