@@ -650,7 +650,7 @@
 		  ;; without checking for the file existence
 		  (file-name-nondirectory
 		   (file-name-sans-extension buffer-file-name))
-		  ".h\"\n\n"))
+		  ".hpp\"\n\n"))
 	   
 	   ;; with checking for the file existence
 	   ;;		  (let
