@@ -6,13 +6,27 @@ import os
 # flymake file to process
 filepath = os.path.join(os.path.realpath(os.curdir), sys.argv[1])
 
+# read the content of the file to be processed
 content = open(filepath, "r").read()
+
+python_path = ["/milk/users/benoit/devinstall/python2.7/centos6",
+               "/milk/code/central/python2.7/centos6",
+               "/milk/code/shotgun/studio/install/core/python/"]
+library_path = ["/milk/code/central/lib/centos6/gcc-4.4.7/"]
+python_bin = "/milk/code/dev/bin/centos6/python2.7"
+
 if "import maya" in content or "from maya" in content:
-    command = 'env PYTHONPATH=/milk/users/benoit/devinstall/python2.7/centos6:/milk/code/central/python2.7/centos6:/milk/code/central/addons/el6/maya2014/python:/milk/apps/autodesk/maya/2014extSP1/lib/python2.7/site-packages/:/milk/code/shotgun/studio/install/core/python/ LD_LIBRARY_PATH=/milk/code/central/lib/centos6/gcc-4.4.7/ /milk/code/dev/bin/centos6/python2.7 -c "import sys; from pylint import epylint; sys.argv.append(\\\"%s\\\"); epylint.Run()"' % filepath
+    python_path.extend(["/milk/code/central/addons/centos6/maya2014/python",
+                        "/milk/apps/autodesk/maya/2014extSP2/lib/python2.7/site-packages/"])
+#elif "import nuke" in content or "from nuke" in content:
+#    nukever = os.getenv("NUKEVER")
+#    python_bin = "/milk/apps/thefoundry/nuke/%s/Nuke%s/python" % (nukever, nukever)
+
+command = 'env PYTHONPATH=%s LD_LIBRARY_PATH=%s %s -c "import sys; from pylint import epylint; sys.argv.append(\\\"%s\\\"); epylint.Run()"' % (":".join(python_path), ":".join(library_path), python_bin, filepath)
+try:
     os.system(command)
-else:
-    import os
-    os.environ["PYTHONPATH"]="/milk/users/benoit/devinstall/python2.6/centos6:/milk/code/central/python2.6/centos6:/milk/code/central/addons/el6/maya2014/python/:/milk/code/shotgun/studio/install/core/python/"
-    os.environ["LD_LIBRARY_PATH"]="/milk/code/central/lib/centos6/gcc-4.4.7"
-    from pylint import epylint
-    epylint.Run()
+except Exception as e:
+    log = open("%s/flymake_error_log.txt" % os.getenv("HOME"), "w")
+    log.write(str(e))
+    log.close()
+    raise e

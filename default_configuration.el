@@ -182,7 +182,7 @@
                     'flymake-create-temp-inplace))
         (local-file (file-relative-name
                      temp-file
-                     (file-name-directory buffer-file-name))))
+                     buffer-file-name)))
    (list pylint (list local-file))))
 
 (add-to-list 'flymake-allowed-file-name-masks
@@ -193,6 +193,10 @@
 
 ;; Configure to wait a bit longer after edits before starting
 (setq-default flymake-no-changes-timeout '3)
+
+(custom-set-faces
+ '(flymake-errline ((((class color)) (:background "Red"))))
+ '(flymake-warnline ((((class color)) (:background "tan2")))))
 
 ;; Keymaps to navigate to the errors
 ;; (add-hook 'python-mode-hook '(lambda () (define-key python-mode-map "\C-cn" 'flymake-goto-next-error)))
