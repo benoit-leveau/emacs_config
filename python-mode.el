@@ -502,7 +502,7 @@ support for features needed by `python-mode'.")
      '("\\<\\(self\\|Ellipsis\\|True\\|False\\|None\\)\\>"
        1 py-pseudo-keyword-face)
      ;; XXX, TODO, and FIXME tags
-     '("XXX\\|TODO\\|FIXME" 0 py-XXX-tag-face t)
+     '("TODO\\|FIXME" 0 py-XXX-tag-face t)
      ))
   "Additional expressions to highlight in Python mode.")
 (put 'python-mode 'font-lock-defaults '(python-font-lock-keywords))
