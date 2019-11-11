@@ -1221,6 +1221,37 @@ FORCE-OTHER-WINDOW is ignored."
 
 (global-set-key (kbd "C-'") 'open-same-buffer-other-window)
 
+;; 2015-07-04 bug of pasting in emacs.
+;; http://debbugs.gnu.org/cgi/bugreport.cgi?bug=16737#17
+;; http://ergoemacs.org/misc/emacs_bug_cant_paste_2015.html
+(setq x-selection-timeout 300)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Emacs to Maya
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; For MEL
+(add-hook
+ 'mel-mode-hook
+ (lambda ()
+   (require 'etom)
+   (setq etom-default-host "localhost")
+   (setq etom-default-port 12345)
+   (local-set-key (kbd "C-x C-e") 'etom-send-region)
+   (local-set-key (kbd "C-c C-e") 'etom-send-buffer)
+   (local-set-key (kbd "C-c C-z") 'etom-show-buffer)))
+
+;; For Python
+(add-hook
+ 'python-mode-hook
+ (lambda ()
+   (require 'etom)
+   (setq etom-default-host "localhost")
+   (setq etom-default-port 12345)
+   (local-set-key (kbd "C-x C-e") 'etom-send-region-py)
+   (local-set-key (kbd "C-c C-e") 'etom-send-buffer-py)
+   (local-set-key (kbd "C-c C-z") 'etom-show-buffer)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Initial Configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
