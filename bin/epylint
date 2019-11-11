@@ -18,9 +18,11 @@ python_bin = "/milk/code/dev/bin/centos6/python2.7"
 if "import maya" in content or "from maya" in content:
     python_path.extend(["/milk/code/central/addons/centos6/maya2014/python",
                         "/milk/apps/autodesk/maya/2014extSP2/lib/python2.7/site-packages/"])
-#elif "import nuke" in content or "from nuke" in content:
-#    nukever = os.getenv("NUKEVER")
-#    python_bin = "/milk/apps/thefoundry/nuke/%s/Nuke%s/python" % (nukever, nukever)
+elif "import nuke" in content or "from nuke" in content:
+    python_path.extend(["%s/devinstall/addons/centos6/nuke9.0/python" % os.getenv("HOME")])
+    python_path.extend(["/milk/code/central/addons/centos6/nuke9.0/python"])
+    # nukever = os.getenv("NUKEVER")
+    # python_bin = "/milk/apps/thefoundry/nuke/%s/Nuke%s/python" % (nukever, nukever)
 
 command = 'env PYTHONPATH=%s LD_LIBRARY_PATH=%s %s -c "import sys; from pylint import epylint; sys.argv.append(\\\"%s\\\"); epylint.Run()"' % (":".join(python_path), ":".join(library_path), python_bin, filepath)
 try:
